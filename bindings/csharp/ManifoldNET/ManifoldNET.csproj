@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+	</PropertyGroup>
 	
 	<PropertyGroup Condition="$(Configuration.Contains('MeshExport'))">
 		<DefineConstants>$(DefineConstants);MESH_EXPORT</DefineConstants>
@@ -78,9 +81,5 @@
 			<PackagePath>runtimes/win-x64/native</PackagePath>
 			<Pack>true</Pack>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Native\" />
 	</ItemGroup>
 </Project>

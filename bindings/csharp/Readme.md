@@ -7,6 +7,9 @@ Manifold is a geometry library dedicated to creating and operating on manifold t
 # Nuget package
 
 
-
 # Quick start
 
+
+# References
+
+[P/Invoke](https://learn.microsoft.com/zh-cn/dotnet/standard/native-interop/)
