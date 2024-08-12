@@ -1,85 +1,85 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
-	</PropertyGroup>
-	
-	<PropertyGroup Condition="$(Configuration.Contains('MeshExport'))">
-		<DefineConstants>$(DefineConstants);MESH_EXPORT</DefineConstants>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(Configuration.Contains('MeshExport'))">
+    <DefineConstants>$(DefineConstants);MESH_EXPORT</DefineConstants>
+  </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release_MeshExport|netstandard2.0|AnyCPU'">
-		<Optimize>True</Optimize>
-	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release_MeshExport|netstandard2.0|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release_MeshExport|net8.0|AnyCPU'">
-		<Optimize>True</Optimize>
-	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release_MeshExport|net8.0|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
 
-	<PropertyGroup Condition="$(Configuration.Contains('MeshExport'))">
-		<PackageId>ManifoldNET.MeshIO</PackageId>
-	</PropertyGroup>
-	<PropertyGroup>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<PackageProjectUrl>https://github.com/elalish/manifold</PackageProjectUrl>
-		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<RepositoryUrl>https://github.com/elalish/manifold</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>manifold;mesh;mesh booloperation;geometry library;topological;</PackageTags>
-		<Description>Geometry library for topological robustness.</Description>
-		<PackageIcon>icon.png</PackageIcon>
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-	</PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('MeshExport'))">
+    <PackageId>ManifoldNET.MeshIO</PackageId>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/elalish/manifold</PackageProjectUrl>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/elalish/manifold</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>manifold;mesh;mesh booloperation;geometry library;topological;</PackageTags>
+    <Description>Geometry library for topological robustness.</Description>
+    <PackageIcon>icon.png</PackageIcon>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
 
-	<PropertyGroup>
-		<_IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</_IsWindows>
-		<_IsMacOS Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</_IsMacOS>
-		<_IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</_IsLinux>
-	</PropertyGroup>
-	<ItemGroup Condition="$(Configuration.Contains('MeshExport'))">
-		<Content Include="build\net40\ManifoldNET.MeshIO.targets">
-			<PackagePath>build/net40/ManifoldNET.MeshIO.targets</PackagePath>
-			<Pack>true</Pack>
-		</Content>
-	</ItemGroup>
-	<ItemGroup>
-	  <None Remove="build\net40\ManifoldNET.MeshIO.targets" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="..\Readme.md">
-		  <Pack>True</Pack>
-		  <PackagePath>\</PackagePath>
-		</None>
-		<None Include="icon.png" Pack="true" PackagePath="\" />
-		<Content Include="runtimes/win-x64/native/manifoldc.dll">
-			<PackagePath>runtimes/win-x64/native</PackagePath>
-			<Pack>true</Pack>
-		</Content>
-	</ItemGroup>
+  <PropertyGroup>
+    <_IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</_IsWindows>
+    <_IsMacOS Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</_IsMacOS>
+    <_IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</_IsLinux>
+  </PropertyGroup>
+  <ItemGroup Condition="$(Configuration.Contains('MeshExport'))">
+    <Content Include="build\net40\ManifoldNET.MeshIO.targets">
+      <PackagePath>build/net40/ManifoldNET.MeshIO.targets</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="build\net40\ManifoldNET.MeshIO.targets" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="icon.png" Pack="true" PackagePath="\" />
+    <Content Include="runtimes/win-x64/native/manifoldc.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0" />
+  </ItemGroup>
 
-	<ItemGroup Condition="$(Configuration.Contains('MeshExport'))">
-		<Content Include="runtimes/win-x64/native/assimp-vc143-mt.dll">
-			<PackagePath>runtimes/win-x64/native</PackagePath>
-			<Pack>true</Pack>
-		</Content>
-		<Content Include="runtimes/win-x64/native/minizip.dll">
-			<PackagePath>runtimes/win-x64/native</PackagePath>
-			<Pack>true</Pack>
-		</Content>
-		<Content Include="runtimes/win-x64/native/poly2tri.dll">
-			<PackagePath>runtimes/win-x64/native</PackagePath>
-			<Pack>true</Pack>
-		</Content>
-		<Content Include="runtimes/win-x64/native/pugixml.dll">
-			<PackagePath>runtimes/win-x64/native</PackagePath>
-			<Pack>true</Pack>
-		</Content>
-		<Content Include="runtimes/win-x64/native/zlib1.dll">
-			<PackagePath>runtimes/win-x64/native</PackagePath>
-			<Pack>true</Pack>
-		</Content>
-	</ItemGroup>
+  <ItemGroup Condition="$(Configuration.Contains('MeshExport'))">
+    <Content Include="runtimes/win-x64/native/assimp-vc143-mt.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="runtimes/win-x64/native/minizip.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="runtimes/win-x64/native/poly2tri.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="runtimes/win-x64/native/pugixml.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="runtimes/win-x64/native/zlib1.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
 </Project>
