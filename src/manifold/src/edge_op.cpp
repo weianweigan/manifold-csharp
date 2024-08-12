@@ -112,7 +112,7 @@ struct SwappableEdge {
 struct SortEntry {
   int start;
   int end;
-  int index;
+  size_t index;
   inline bool operator<(const SortEntry& other) const {
     return start == other.start ? end < other.end : start < other.start;
   }
@@ -144,7 +144,7 @@ void Manifold::Impl::SimplifyTopology() {
   if (!halfedge_.size()) return;
 
   const size_t nbEdges = halfedge_.size();
-  auto policy = autoPolicy(nbEdges);
+  auto policy = autoPolicy(nbEdges, 1e5);
   size_t numFlagged = 0;
   Vec<uint8_t> bflags(nbEdges);
 
@@ -156,14 +156,14 @@ void Manifold::Impl::SimplifyTopology() {
     ZoneScopedN("DedupeEdge");
     Vec<SortEntry> entries;
     entries.reserve(nbEdges / 2);
-    for (int i = 0; i < nbEdges; ++i) {
+    for (size_t i = 0; i < nbEdges; ++i) {
       if (halfedge_[i].IsForward()) {
         entries.push_back({halfedge_[i].startVert, halfedge_[i].endVert, i});
       }
     }
 
-    stable_sort(policy, entries.begin(), entries.end());
-    for (int i = 0; i < entries.size() - 1; ++i) {
+    stable_sort(entries.begin(), entries.end());
+    for (size_t i = 0; i < entries.size() - 1; ++i) {
       if (entries[i].start == entries[i + 1].start &&
           entries[i].end == entries[i + 1].end) {
         DedupeEdge(entries[i].index);
@@ -189,7 +189,7 @@ void Manifold::Impl::SimplifyTopology() {
     ZoneScopedN("CollapseShortEdge");
     numFlagged = 0;
     ShortEdge se{halfedge_, vertPos_, precision_};
-    for_each_n(policy, countAt(0_z), nbEdges,
+    for_each_n(policy, countAt(0_uz), nbEdges,
                [&](size_t i) { bflags[i] = se(i); });
     for (size_t i = 0; i < nbEdges; ++i) {
       if (bflags[i]) {
@@ -211,7 +211,7 @@ void Manifold::Impl::SimplifyTopology() {
     ZoneScopedN("CollapseFlaggedEdge");
     numFlagged = 0;
     FlagEdge se{halfedge_, meshRelation_.triRef};
-    for_each_n(policy, countAt(0_z), nbEdges,
+    for_each_n(policy, countAt(0_uz), nbEdges,
                [&](size_t i) { bflags[i] = se(i); });
     for (size_t i = 0; i < nbEdges; ++i) {
       if (bflags[i]) {
@@ -233,7 +233,7 @@ void Manifold::Impl::SimplifyTopology() {
     ZoneScopedN("RecursiveEdgeSwap");
     numFlagged = 0;
     SwappableEdge se{halfedge_, vertPos_, faceNormal_, precision_};
-    for_each_n(policy, countAt(0_z), nbEdges,
+    for_each_n(policy, countAt(0_uz), nbEdges,
                [&](size_t i) { bflags[i] = se(i); });
     std::vector<int> edgeSwapStack;
     std::vector<int> visited(halfedge_.size(), -1);
@@ -368,7 +368,7 @@ void Manifold::Impl::UpdateVert(int vert, int startEdge, int endEdge) {
     current = NextHalfedge(current);
     halfedge_[current].startVert = vert;
     current = halfedge_[current].pairedHalfedge;
-    ASSERT(current != startEdge, logicErr, "infinite loop in decimator!");
+    DEBUG_ASSERT(current != startEdge, logicErr, "infinite loop in decimator!");
   }
 }
 
@@ -525,7 +525,7 @@ void Manifold::Impl::CollapseEdge(const int edge, std::vector<int>& edges) {
 
     const int vert = halfedge_[current].endVert;
     const int next = halfedge_[current].pairedHalfedge;
-    for (int i = 0; i < edges.size(); ++i) {
+    for (size_t i = 0; i < edges.size(); ++i) {
       if (vert == halfedge_[edges[i]].endVert) {
         FormLoop(edges[i], current);
         start = next;
@@ -659,7 +659,7 @@ void Manifold::Impl::SplitPinchedVerts() {
   ZoneScoped;
   std::vector<bool> vertProcessed(NumVert(), false);
   std::vector<bool> halfedgeProcessed(halfedge_.size(), false);
-  for (int i = 0; i < halfedge_.size(); ++i) {
+  for (size_t i = 0; i < halfedge_.size(); ++i) {
     if (halfedgeProcessed[i]) continue;
     int vert = halfedge_[i].startVert;
     if (vertProcessed[vert]) {

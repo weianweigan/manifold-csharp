@@ -17,7 +17,6 @@
 #include <atomic>
 
 #include "public.h"
-#include "utils.h"
 #include "vec.h"
 
 namespace {
@@ -70,7 +69,8 @@ class HashTableD {
   int Size() const { return keys_.size(); }
 
   bool Full() const {
-    return used_.load(std::memory_order_relaxed) * 2 > Size();
+    return used_.load(std::memory_order_relaxed) * 2 >
+           static_cast<size_t>(Size());
   }
 
   void Insert(Uint64 key, const V& val) {
@@ -126,15 +126,14 @@ template <typename V, hash_fun_t H = hash64bit>
 class HashTable {
  public:
   HashTable(size_t size, uint32_t step = 1)
-      : keys_{size == 0 ? 0 : 1_z << (int)ceil(log2(size)), kOpen},
-        values_{size == 0 ? 0 : 1_z << (int)ceil(log2(size)), {}},
+      : keys_{size == 0 ? 0 : 1_uz << (int)ceil(log2(size)), kOpen},
+        values_{size == 0 ? 0 : 1_uz << (int)ceil(log2(size)), {}},
         step_(step) {}
 
   HashTable(const HashTable& other)
-      : keys_(other.keys_),
-        values_(other.values_),
-        used_(other.used_),
-        step_(other.step_) {}
+      : keys_(other.keys_), values_(other.values_), step_(other.step_) {
+    used_.store(other.used_.load());
+  }
 
   HashTable& operator=(const HashTable& other) {
     if (this == &other) return *this;

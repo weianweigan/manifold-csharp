@@ -113,7 +113,12 @@
     "format": "cpp",
     "numbers": "cpp",
     "ranges": "cpp",
-    "stop_token": "cpp"
+    "stop_token": "cpp",
+    "execution": "cpp",
+    "csetjmp": "cpp",
+    "cuchar": "cpp",
+    "propagate_const": "cpp",
+    "scoped_allocator": "cpp"
   },
   "C_Cpp.clang_format_fallbackStyle": "google",
   "editor.formatOnSave": true,
@@ -123,6 +128,7 @@
     "-DMANIFOLD_PYBIND=ON",
     "-DMANIFOLD_EXPORT=ON",
     "-DMANIFOLD_DEBUG=ON",
+    "-DMANIFOLD_EXCEPTIONS=ON",
     "-DMANIFOLD_PAR=TBB",
     "-DCODE_COVERAGE=OFF",
     "-DCMAKE_CXX_FLAGS=''" //'-fsanitize=address,undefined'"

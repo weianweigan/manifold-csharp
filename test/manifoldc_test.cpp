@@ -3,7 +3,6 @@
 #include "gtest/gtest.h"
 #include "manifold.h"
 #include "polygon.h"
-#include "sdf.h"
 #include "types.h"
 
 TEST(CBIND, sphere) {
@@ -121,10 +120,10 @@ TEST(CBIND, level_set) {
   ManifoldBox *bounds = manifold_box(malloc(manifold_box_size()), -bb * 3,
                                      -bb * 1, -bb * 1, bb * 3, bb * 1, bb * 1);
   ManifoldMeshGL *sdf_mesh = manifold_level_set(malloc(manifold_meshgl_size()),
-                                                sdf, bounds, 0.5, 0, NULL);
+                                                sdf, bounds, 0.5, 0, -1, NULL);
   ManifoldManifold *sdf_man = manifold_of_meshgl(malloc(sz), sdf_mesh);
   ManifoldMeshGL *sdf_mesh_context = manifold_level_set(
-      malloc(manifold_meshgl_size()), sdfcontext, bounds, 0.5, 0, context);
+      malloc(manifold_meshgl_size()), sdfcontext, bounds, 0.5, 0, -1, context);
   ManifoldManifold *sdf_man_context =
       manifold_of_meshgl(malloc(sz), sdf_mesh_context);
 
@@ -211,13 +210,10 @@ TEST(CBIND, extrude) {
       malloc(manifold_simple_polygon_size()), &pts[0], 4)};
   ManifoldPolygons *polys =
       manifold_polygons(malloc(manifold_polygons_size()), sq, 1);
-  ManifoldCrossSection *cross =
-      manifold_cross_section_of_polygons(malloc(manifold_cross_section_size()),
-                                         polys, MANIFOLD_FILL_RULE_POSITIVE);
 
   ManifoldManifold *cube = manifold_cube(malloc(sz), 1., 1., 1., 0);
   ManifoldManifold *extrusion =
-      manifold_extrude(malloc(sz), cross, 1, 0, 0, 1, 1);
+      manifold_extrude(malloc(sz), polys, 1, 0, 0, 1, 1);
 
   ManifoldManifold *diff = manifold_difference(malloc(sz), cube, extrusion);
   ManifoldProperties props = manifold_get_properties(diff);

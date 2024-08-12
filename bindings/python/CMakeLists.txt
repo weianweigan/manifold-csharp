@@ -14,13 +14,31 @@
 
 project(python)
 
-add_subdirectory(third_party)
+execute_process(
+  COMMAND "${Python_EXECUTABLE}" -m nanobind --version
+  OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE NB_VERSION)
+if(NB_VERSION VERSION_GREATER_EQUAL 1.8.0)
+  message("Found nanobind, version ${NB_VERSION}")
+  execute_process(
+    COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
+    OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE nanobind_ROOT)
+  find_package(nanobind CONFIG REQUIRED)
+else()
+  message(STATUS "nanobind not found, downloading from source")
+  include(FetchContent)
+  FetchContent_Declare(nanobind
+    GIT_REPOSITORY https://github.com/wjakob/nanobind.git
+    GIT_TAG 8d7f1ee0621c17fa370b704b2100ffa0243d5bf  # v2.0.0
+    GIT_PROGRESS TRUE
+  )
+  FetchContent_MakeAvailable(nanobind)
+endif()
 nanobind_add_module(
   manifold3d
   NB_STATIC STABLE_ABI LTO
   autogen_docstrings.inl
   manifold3d.cpp)
-target_link_libraries(manifold3d PRIVATE manifold sdf polygon)
+target_link_libraries(manifold3d PRIVATE manifold polygon cross_section)
 target_compile_options(manifold3d PRIVATE ${MANIFOLD_FLAGS} -DMODULE_NAME=manifold3d)
 target_compile_features(manifold3d PUBLIC cxx_std_17)
 set_target_properties(manifold3d PROPERTIES OUTPUT_NAME "manifold3d")

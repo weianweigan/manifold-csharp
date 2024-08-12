@@ -19,7 +19,6 @@
 #include "cross_section.h"
 #include "manifold.h"
 #include "public.h"
-#include "sdf.h"
 #include "types.h"
 
 using namespace manifold;
@@ -67,7 +66,7 @@ std::vector<glm::vec4> vector_of_vec_array(ManifoldVec4 *vs, size_t length);
 template <typename T>
 std::vector<T> vector_of_array(T *ts, size_t length) {
   auto vec = std::vector<T>();
-  for (int i = 0; i < length; ++i) {
+  for (size_t i = 0; i < length; ++i) {
     vec.push_back(ts[i]);
   }
   return vec;

@@ -17,7 +17,7 @@ project(manifold_test)
 set(CMAKE_CXX_STANDARD 17)
 enable_testing()
 
-set(SOURCE_FILES polygon_test.cpp cross_section_test.cpp manifold_test.cpp boolean_test.cpp complex_boolean_test.cpp sdf_test.cpp samples_test.cpp test_main.cpp)
+set(SOURCE_FILES test_main.cpp polygon_test.cpp cross_section_test.cpp properties_test.cpp manifold_test.cpp hull_test.cpp smooth_test.cpp sdf_test.cpp boolean_test.cpp boolean_complex_test.cpp samples_test.cpp)
 
 if(MANIFOLD_CBIND AND NOT EMSCRIPTEN)
   list(APPEND SOURCE_FILES manifoldc_test.cpp)
@@ -43,7 +43,7 @@ if(NOT TARGET GTest::gtest_main)
 endif()
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} polygon GTest::gtest_main manifold sdf samples cross_section)
+target_link_libraries(${PROJECT_NAME} polygon GTest::gtest_main manifold samples cross_section)
 
 if(MANIFOLD_FUZZ)
   FetchContent_Declare(fuzztest
@@ -73,6 +73,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE ${MANIFOLD_FLAGS})
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
 add_test(test_all ${PROJECT_NAME})
+target_precompile_headers(${PROJECT_NAME} INTERFACE test.h)
 
 if(EMSCRIPTEN)
   set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS

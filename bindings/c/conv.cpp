@@ -19,7 +19,6 @@
 #include "cross_section.h"
 #include "manifold.h"
 #include "public.h"
-#include "sdf.h"
 #include "types.h"
 
 ManifoldManifold *to_c(manifold::Manifold *m) {
@@ -227,7 +226,7 @@ glm::vec4 from_c(ManifoldVec4 v) { return glm::vec4(v.x, v.y, v.z, v.w); }
 
 std::vector<glm::vec3> vector_of_vec_array(ManifoldVec3 *vs, size_t length) {
   auto vec = std::vector<glm::vec3>();
-  for (int i = 0; i < length; ++i) {
+  for (size_t i = 0; i < length; ++i) {
     vec.push_back(from_c(vs[i]));
   }
   return vec;
@@ -235,7 +234,7 @@ std::vector<glm::vec3> vector_of_vec_array(ManifoldVec3 *vs, size_t length) {
 
 std::vector<glm::ivec3> vector_of_vec_array(ManifoldIVec3 *vs, size_t length) {
   auto vec = std::vector<glm::ivec3>();
-  for (int i = 0; i < length; ++i) {
+  for (size_t i = 0; i < length; ++i) {
     vec.push_back(from_c(vs[i]));
   }
   return vec;
@@ -243,7 +242,7 @@ std::vector<glm::ivec3> vector_of_vec_array(ManifoldIVec3 *vs, size_t length) {
 
 std::vector<glm::vec4> vector_of_vec_array(ManifoldVec4 *vs, size_t length) {
   auto vec = std::vector<glm::vec4>();
-  for (int i = 0; i < length; ++i) {
+  for (size_t i = 0; i < length; ++i) {
     vec.push_back(from_c(vs[i]));
   }
   return vec;
