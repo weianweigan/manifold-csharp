@@ -1,28 +1,36 @@
-﻿using System.Runtime.InteropServices;
-
-namespace ManifoldNET;
+﻿namespace ManifoldNET;
 
 /// <summary>
-/// Base object for manifold library.
+/// Base object for manifold.
 /// </summary>
 /// <remarks>
-/// Initializess base object.
+/// Initializes a base object.
 /// </remarks>
-/// <param name="pointer"></param>
-public abstract class ManifoldObject(nint pointer) : IDisposable
+public abstract class ManifoldObject : IDisposable
 {
     /// <summary>
     /// Pointer for this object.
     /// </summary>
-    protected nint _pointer = pointer;
+    protected IntPtr _pointer = IntPtr.Zero;
     private bool _disposedValue;
 
-    ///<inheritdoc/>
-    protected virtual void Dispose(bool disposing)
+    /// <param name="pointer"></param>
+    protected ManifoldObject(IntPtr pointer)
+    {
+        _pointer = pointer;
+    }
+
+    internal IntPtr GetPointer() => _pointer;
+
+    private void Dispose(bool disposing)
     {
         if (!_disposedValue)
         {
-            Marshal.FreeHGlobal(_pointer);
+            if (_pointer != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(_pointer);
+                _pointer = IntPtr.Zero;
+            }
             _disposedValue = true;
         }
     }
@@ -39,4 +47,10 @@ public abstract class ManifoldObject(nint pointer) : IDisposable
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
+
+    /// <summary>
+    /// Delete by pointer.
+    /// </summary>
+    /// <param name="pointer"></param>
+    protected abstract void Delete(IntPtr pointer);
 }

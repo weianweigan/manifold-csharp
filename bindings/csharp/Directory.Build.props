@@ -1,11 +1,12 @@
 <Project>
-	<PropertyGroup>
-		<Version>1.0.0-alpha</Version>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<LangVersion>latest</LangVersion>
-		<NoWarn>NU5100;CS0169;</NoWarn>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<Configurations>Debug;Release;Debug_MeshExport;Release_MeshExport</Configurations>
-	</PropertyGroup>
+  <PropertyGroup>
+    <Version>1.0.0-alpha</Version>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <Configurations>Debug;Release;Debug_MeshExport;Release_MeshExport</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(Configuration.Contains('MeshExport'))">
+    <DefineConstants>$(DefineConstants);MESH_EXPORT</DefineConstants>
+  </PropertyGroup>
 </Project>

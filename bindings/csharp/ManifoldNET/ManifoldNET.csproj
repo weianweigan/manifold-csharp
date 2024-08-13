@@ -1,11 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  
-  <PropertyGroup Condition="$(Configuration.Contains('MeshExport'))">
-    <DefineConstants>$(DefineConstants);MESH_EXPORT</DefineConstants>
-  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="System" />
+    <Using Include="System.Runtime.InteropServices" />
+  </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release_MeshExport|netstandard2.0|AnyCPU'">
     <Optimize>True</Optimize>
@@ -34,6 +36,7 @@
     <_IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</_IsWindows>
     <_IsMacOS Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</_IsMacOS>
     <_IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</_IsLinux>
+    <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup Condition="$(Configuration.Contains('MeshExport'))">
     <Content Include="build\net40\ManifoldNET.MeshIO.targets">
@@ -82,4 +85,8 @@
       <Pack>true</Pack>
     </Content>
   </ItemGroup>
+
+<!--  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="@echo off&#xD;&#xA;&#xD;&#xA;set source=$(ProjectDir)runtimes\win-x64\binary\$(Configuration)&#xD;&#xA;set destination=$(ProjectDir)runtimes\win-x64\native&#xD;&#xA;&#xD;&#xA;if not exist &quot;%25destination%25&quot; (&#xD;&#xA;    echo Directory not found: %25destination%25&#xD;&#xA;    exit /b 1&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;del /q /f &quot;%25destination%25\*&quot;&#xD;&#xA;echo Clear directory: %25destination%25&#xD;&#xA;&#xD;&#xA;robocopy %25source%25 %25destination%25 /MIR /NFL /NDL /R:0 /W:0&#xD;&#xA;&#xD;&#xA;set errorlevel=%25ERRORLEVEL%25&#xD;&#xA;&#xD;&#xA;if %25errorlevel%25 lss 8 (&#xD;&#xA;    echo Robocopy success: %25errorlevel%25&#xD;&#xA;    exit /b 0&#xD;&#xA;) else (&#xD;&#xA;    echo Robocopy failed: %25errorlevel%25&#xD;&#xA;    exit /b %25errorlevel%25&#xD;&#xA;)" />
+  </Target>-->
 </Project>

@@ -24,6 +24,5 @@ public struct Vector3(float x, float y, float z)
     public float z = z;
 
     /// <inheritdoc/>
-    public override readonly string ToString() => 
-        $"{nameof(Vector3)}:{{x:{x}, y:{y}, z:{z}}}";
+     public readonly override string ToString() => $"{nameof(Vector3)}:{{x:{x}, y:{y}, z:{z}}}";
 }

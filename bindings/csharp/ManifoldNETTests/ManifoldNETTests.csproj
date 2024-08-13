@@ -1,10 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFrameworks>net48;net8.0</TargetFrameworks>
+	<TargetFramework>net8.0</TargetFramework>
 	<IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <Using Include="System" />
+    <Using Include="ManifoldNET" />
+  </ItemGroup>
 
   <ItemGroup>
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
@@ -21,10 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ManifoldNET\ManifoldNET.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Include="Xunit" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

@@ -30,7 +30,7 @@ public struct Vector4(float x, float y, float z, float w)
     public float w = w;
 
     /// <inheritdoc/>
-    public override readonly string ToString()
+    public readonly override string ToString()
     {
         return $"{nameof(Vector4)}:{{x:{x}, y:{y}, z:{z}, w:{w}}}";
     }

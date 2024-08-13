@@ -18,7 +18,5 @@ public struct Vector2(float x, float y)
     public float y = y;
 
     /// <inheritdoc/>
-
-    public override readonly string ToString() => 
-        $"{nameof(Vector3)}:{{x:{x}, y:{y}}}";
+    public readonly override string ToString() => $"{nameof(Vector3)}:{{x:{x}, y:{y}}}";
 }
