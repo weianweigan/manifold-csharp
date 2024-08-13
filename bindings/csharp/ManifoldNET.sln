@@ -7,12 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManifoldNET", "ManifoldNET\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8272DDBB-ADE0-4D75-8C38-57A536E75086}"
 	ProjectSection(SolutionItems) = preProject
+		Build.md = Build.md
 		Directory.Build.props = Directory.Build.props
 		Readme.md = Readme.md
-		Build.md = Build.md
+		Version.props = Version.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManifoldNETTests", "ManifoldNETTests\ManifoldNETTests.csproj", "{8CE1D2A6-D049-43BF-9B1A-0D27C6C9BF0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManifoldNETTests", "ManifoldNETTests\ManifoldNETTests.csproj", "{8CE1D2A6-D049-43BF-9B1A-0D27C6C9BF0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

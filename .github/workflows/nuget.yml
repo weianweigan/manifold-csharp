@@ -1,0 +1,89 @@
+name: nuget
+
+on:
+  push:
+    tags:
+    - '*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: jwlawson/actions-setup-cmake@v2
+      - uses: ilammy/msvc-dev-cmd@v1
+      # Build release
+      - name: Build
+        shell: powershell
+        run: |
+          cmake . -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DMANIFOLD_DEBUG=ON -DMANIFOLD_PAR=NONE -A x64 -B build
+          cd build
+          cmake --build . --target ALL_BUILD --config Release
+      - name: Test ${{matrix.parallel_backend}}
+        shell: bash
+        run: |
+          cd build/bin/Release
+          ./manifold_test.exe
+          cd ../../
+      - name: Copy to bindary
+        run: |
+        shell: powershell
+          robocopy build\bin\Release bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release /MIR /NFL /NDL /R:0 /W:0
+
+       # Build release with mesh export option.
+      - name: Install vcpkg
+        shell: powershell
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg; .\bootstrap-vcpkg.bat
+          $path = (Get-Location).Path
+          $env:VCPKG_ROOT = "$path\vcpkg"
+          $env:PATH = "$env:VCPKG_ROOT;$env:PATH"
+          vcpkg install assimp
+
+      - name: Build with mesh export on
+        shell: powershell
+        run: |
+          cmake . -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DMANIFOLD_DEBUG=ON -DMANIFOLD_PAR=NONE -DMANIFOLD_EXPORT=ON -DCMAKE_PREFIX_PATH=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows/share -A x64 -B build
+          cd build
+          cmake --build . --target ALL_BUILD --config Release
+      - name: Test ${{matrix.parallel_backend}}
+        shell: bash
+        run: |
+          cd build/bin/Release
+          ./manifold_test.exe
+          cd ../../
+      - name: Copy to bindary
+        run: |
+        shell: powershell
+          robocopy build\bin\Release bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release_MeshExport /MIR /NFL /NDL /R:0 /W:0
+
+      # Build csharp nuget packages
+      - name: Setup .NET SDKs
+        uses: actions/setup-dotnet@v3
+
+      # https://github.com/dotnet-campus/dotnetCampus.TagToVersion
+      - name: Install dotnet tool
+        run: dotnet tool install -g dotnetCampus.TagToVersion
+
+      - name: Set tag to version  
+        run: dotnet TagToVersion -t ${{ github.ref }} -f Version.props
+
+      - name: Build
+        run: |
+            cd bindings\csharp
+            dotnet build -c Release
+
+      - name: Build mesh export
+        run: 
+            cd bindings\csharp
+            dotnet build -c Release_MeshExport
+
+      - name: Publish to nuget.org
+        run: dotnet nuget push bindings\csharp\bin\Release\*.nupkg --api-key ${{ secrets.NugetKey }} --source https://api.nuget.org/v3/index.json
+
+      - name: Publish mesh export to nuget.org
+        run: dotnet nuget push bindings\csharp\bin\Release_MeshExport\*.nupkg --api-key ${{ secrets.NugetKey }} --source https://api.nuget.org/v3/index.json

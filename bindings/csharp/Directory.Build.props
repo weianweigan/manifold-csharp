@@ -1,6 +1,8 @@
 <Project>
+
+  <Import Project="Version.props" />
+
   <PropertyGroup>
-    <Version>1.0.0-alpha</Version>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <Configurations>Debug;Release;Debug_MeshExport;Release_MeshExport</Configurations>
