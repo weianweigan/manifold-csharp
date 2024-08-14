@@ -4,6 +4,7 @@ on:
   push:
     tags:
     - '*'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -53,7 +54,7 @@ jobs:
       - name: Setup .NET SDKs
         uses: actions/setup-dotnet@v4
         with:
-            dotnet-versions: '8.0.x'
+            dotnet-version: '8.0.x'
 
       # https://github.com/dotnet-campus/dotnetCampus.TagToVersion
       - name: Install dotnet tool

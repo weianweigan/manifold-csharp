@@ -64,6 +64,6 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="@echo off&#xD;&#xA;&#xD;&#xA;set source=$(ProjectDir)runtimes\win-x64\binary\$(Configuration)&#xD;&#xA;set destination=$(ProjectDir)runtimes\win-x64\native&#xD;&#xA;&#xD;&#xA;if not exist &quot;%25destination%25&quot; (&#xD;&#xA;    echo Directory not found: %25destination%25&#xD;&#xA;    exit /b 1&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;del /q /f &quot;%25destination%25\*&quot;&#xD;&#xA;echo Clear directory: %25destination%25&#xD;&#xA;&#xD;&#xA;robocopy %25source%25 %25destination%25 /MIR /NFL /NDL /R:0 /W:0&#xD;&#xA;&#xD;&#xA;set errorlevel=%25ERRORLEVEL%25&#xD;&#xA;&#xD;&#xA;if %25errorlevel%25 lss 8 (&#xD;&#xA;    echo Robocopy success: %25errorlevel%25&#xD;&#xA;    exit /b 0&#xD;&#xA;) else (&#xD;&#xA;    echo Robocopy failed: %25errorlevel%25&#xD;&#xA;    exit /b %25errorlevel%25&#xD;&#xA;)" />
+    <Exec Command="@echo off&#xD;&#xA;&#xD;&#xA;set source=$(ProjectDir)runtimes\win-x64\binary\$(Configuration)&#xD;&#xA;set destination=$(ProjectDir)runtimes\win-x64\native&#xD;&#xA;&#xD;&#xA;if not exist &quot;%25destination%25&quot; (&#xD;&#xA;    echo Directory not found: %25destination%25&#xD;&#xA;    md &quot;%25destination%25&quot;&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;del /q /f &quot;%25destination%25\*&quot;&#xD;&#xA;echo Clear directory: %25destination%25&#xD;&#xA;&#xD;&#xA;(robocopy %25source%25 %25destination%25 /MIR /NFL /NDL /R:0 /W:0) ^&amp; exit 0" />
   </Target>
 </Project>
