@@ -74,7 +74,7 @@ jobs:
             dotnet build bindings\csharp\ManifoldNET.sln -c Release_MeshExport -p:Platform="Any CPU"
 
       - name: Publish to nuget.org
-        run: dotnet nuget push bindings\csharp\bin\Release\*.nupkg --api-key ${{ secrets.NugetKey }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push bindings\csharp\ManifoldNET\bin\Release\*.nupkg --api-key ${{ secrets.NugetKey }} --source https://api.nuget.org/v3/index.json
 
       - name: Publish mesh export to nuget.org
-        run: dotnet nuget push bindings\csharp\bin\Release_MeshExport\*.nupkg --api-key ${{ secrets.NugetKey }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push bindings\csharp\ManifoldNET\bin\Release_MeshExport\*.nupkg --api-key ${{ secrets.NugetKey }} --source https://api.nuget.org/v3/index.json
