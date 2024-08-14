@@ -25,7 +25,8 @@ cmake --build . --target ALL_BUILD --config Debug
 ```shell
 git clone https://github.com/microsoft/vcpkg.git
 cd vcpkg; .\bootstrap-vcpkg.bat
-$env:VCPKG_ROOT = "C:\path\to\vcpkg"
+$path = (Get-Location).Path
+$env:VCPKG_ROOT = "$path\vcpkg"
 $env:PATH = "$env:VCPKG_ROOT;$env:PATH"
 vcpkg install assimp
 ```
