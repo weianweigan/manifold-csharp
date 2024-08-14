@@ -25,7 +25,7 @@ jobs:
       - name: Copy to bindary
         shell: powershell
         run: |
-          robocopy build\bin\Release bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release /MIR /NFL /NDL /R:0 /W:0
+          (robocopy build\bin\Release bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release /MIR /NFL /NDL /R:0 /W:0) ^& exit 0
 
        # Build release with mesh export option.
       - name: Install vcpkg
@@ -47,7 +47,7 @@ jobs:
       - name: Copy to bindary
         shell: powershell
         run: |
-          robocopy build\bin\Release bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release_MeshExport /MIR /NFL /NDL /R:0 /W:0
+          (robocopy build\bin\Release bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release_MeshExport /MIR /NFL /NDL /R:0 /W:0) ^& exit 0
 
       # Build csharp nuget packages
       - name: Setup .NET SDKs
