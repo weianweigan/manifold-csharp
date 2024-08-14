@@ -66,12 +66,11 @@ jobs:
 
       - name: Build csharp package
         run: |
-            dotnet build bindings\csharp\ManifoldNET.sln -c Release
+            dotnet build bindings\csharp\ManifoldNET.sln -c Release -p:Platform="Any CPU"
 
       - name: Build csharp mesh export package
-        run: 
-            cd bindings\csharp
-            dotnet build -c Release_MeshExport
+        run: |
+            dotnet build bindings\csharp\ManifoldNET.sln -c Release_MeshExport -p:Platform="Any CPU"
 
       - name: Publish to nuget.org
         run: dotnet nuget push bindings\csharp\bin\Release\*.nupkg --api-key ${{ secrets.NugetKey }} --source https://api.nuget.org/v3/index.json
