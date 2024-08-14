@@ -51,21 +51,24 @@ jobs:
 
       # Build csharp nuget packages
       - name: Setup .NET SDKs
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-versions: '8.0.x'
 
       # https://github.com/dotnet-campus/dotnetCampus.TagToVersion
       - name: Install dotnet tool
-        run: dotnet tool install -g dotnetCampus.TagToVersion
+        run: |
+            dotnet --list-sdks
+            dotnet tool install -g dotnetCampus.TagToVersion
 
       - name: Set tag to version  
         run: dotnet TagToVersion -t ${{ github.ref }} -f bindings\csharp\Version.props
 
-      - name: Build
+      - name: Build csharp package
         run: |
-            cd bindings\csharp
-            dotnet build -c Release
+            dotnet build bindings\csharp\ManifoldNET.sln -c Release
 
-      - name: Build mesh export
+      - name: Build csharp mesh export package
         run: 
             cd bindings\csharp
             dotnet build -c Release_MeshExport
