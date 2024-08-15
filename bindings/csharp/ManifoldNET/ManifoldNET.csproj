@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!--Property-->
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -17,6 +18,7 @@
     <Optimize>True</Optimize>
   </PropertyGroup>
 
+  <!--Package-->
   <PropertyGroup Condition="$(Configuration.Contains('MeshExport'))">
     <PackageId>ManifoldNET.MeshIO</PackageId>
   </PropertyGroup>
@@ -32,6 +34,14 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="..\Readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <_IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</_IsWindows>
     <_IsMacOS Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</_IsMacOS>
@@ -44,14 +54,14 @@
       <Pack>true</Pack>
     </Content>
   </ItemGroup>
+  <ItemGroup Condition="$(Configuration.Contains('MeshExport')) == 'false'">
+		<Content Include="build\net40\ManifoldNET.targets">
+			<PackagePath>build/net40/ManifoldNET.targets</PackagePath>
+			<Pack>true</Pack>
+		</Content>
+	</ItemGroup>
+
   <ItemGroup>
-    <None Remove="build\net40\ManifoldNET.MeshIO.targets" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Readme.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
     <None Include="icon.png" Pack="true" PackagePath="\" />
     <Content Include="runtimes/win-x64/native/manifoldc.dll">
       <PackagePath>runtimes/win-x64/native</PackagePath>
@@ -59,8 +69,27 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0" />
+  <ItemGroup Condition="$(Configuration.Contains('MeshExport'))">
+    <Content Include="runtimes/win-x64/native/assimp-vc143-mt.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="runtimes/win-x64/native/minizip.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="runtimes/win-x64/native/poly2tri.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="runtimes/win-x64/native/pugixml.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="runtimes/win-x64/native/zlib1.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

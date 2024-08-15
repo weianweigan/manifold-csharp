@@ -42,6 +42,7 @@ jobs:
       - name: Build with mesh export on
         shell: powershell
         run: |
+          Remove-Item -Path "build\bin\Release" -Force -Recurse
           cmake . -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DMANIFOLD_DEBUG=ON -DMANIFOLD_PAR=NONE -DMANIFOLD_EXPORT=ON -DCMAKE_PREFIX_PATH=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/installed/x64-windows/share -A x64 -B build
           cd build
           cmake --build . --target ALL_BUILD --config Release
@@ -49,6 +50,10 @@ jobs:
         shell: powershell
         run: |
           robocopy build\bin\Release bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release_MeshExport /MIR /NFL /NDL /R:0 /W:0; exit 0
+      - name: Copy assimp binary to Release_MeshExport
+        shell: powershell
+        run: |
+          robocopy vcpkg\installed\x64-windows\bin bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release_MeshExport /MIR /NFL /NDL /R:0 /W:0; exit 0
 
       # Build csharp nuget packages
       - name: Setup .NET SDKs
