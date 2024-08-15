@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <IsPackable>true</IsPackable>
-    <PackageDescription>Formats dates as an SVG clock in .NET Interactive</PackageDescription>
+    <PackageDescription>Polyglot Notebooks extension that displays Manifold object.</PackageDescription>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Polyglot Notebooks extension that displays Manifold object.</Description>
   </PropertyGroup>

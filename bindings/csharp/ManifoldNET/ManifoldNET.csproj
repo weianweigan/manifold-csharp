@@ -55,11 +55,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup Condition="$(Configuration.Contains('MeshExport')) == 'false'">
-		<Content Include="build\net40\ManifoldNET.targets">
-			<PackagePath>build/net40/ManifoldNET.targets</PackagePath>
-			<Pack>true</Pack>
-		</Content>
-	</ItemGroup>
+    <Content Include="build\net40\ManifoldNET.targets">
+      <PackagePath>build/net40/ManifoldNET.targets</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="icon.png" Pack="true" PackagePath="\" />
@@ -83,10 +83,6 @@
       <Pack>true</Pack>
     </Content>
     <Content Include="runtimes/win-x64/native/pugixml.dll">
-      <PackagePath>runtimes/win-x64/native</PackagePath>
-      <Pack>true</Pack>
-    </Content>
-    <Content Include="runtimes/win-x64/native/zlib1.dll">
       <PackagePath>runtimes/win-x64/native</PackagePath>
       <Pack>true</Pack>
     </Content>
