@@ -4,4 +4,4 @@
 
 #!csharp
 
-ClockExtension.ClockKernelExtension.Load(Microsoft.DotNet.Interactive.KernelInvocationContext.Current.HandlingKernel.RootKernel);
+ManifoldNET.Notebooks.ManifoldKernelExtension.Load(Microsoft.DotNet.Interactive.KernelInvocationContext.Current.HandlingKernel.RootKernel);
