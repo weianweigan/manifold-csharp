@@ -12,29 +12,38 @@ public static class ManifoldKernelExtension
 {
     public static void Load(Kernel kernel)
     {
-        // Extension for Manifold object.
-        Formatter.Register<Manifold>(
-            (m, writer) => writer.Write(m.ToModelViewer().ToString()),
-            "text/html"
-        );
+        try
+        {
+            KernelInvocationContext.Current?.Display((object)"Loading manifold extesion...");
 
-        // Next, define a magic command that will display glb file.
-        Command glbCommand = CreateGlbMagicCommand();
+            // Extension for Manifold object.
+            Formatter.Register<Manifold>(
+                (m, writer) => writer.Write(m.ToModelViewer().ToString()),
+                "text/html"
+            );
 
-        kernel.AddDirective(glbCommand);
+            // Next, define a magic command that will display glb file.
+            Command glbCommand = CreateGlbMagicCommand();
 
-        // Finally, display some information to the user so they can see how to use the extension.
-        PocketView view = div(
-            code("ManifoldNET.Notebooks"),
-            " is loaded. It adds visualizations for ",
-            code(typeof(Manifold)),
-            ". Try it by running: ",
-            code("Manifold.Cube(1, 1, 1, true)"),
-            " or using magic code to disply glb file:",
-            code("#!glb -f c:/path/to/name.glb")
-        );
+            kernel.AddDirective(glbCommand);
 
-        KernelInvocationContext.Current?.Display(view);
+            // Finally, display some information to the user so they can see how to use the extension.
+            PocketView view = div(
+                code("ManifoldNET.Notebooks"),
+                " is loaded. It adds visualizations for ",
+                code(typeof(Manifold)),
+                ". Try it by running: ",
+                code("Manifold.Cube(1, 1, 1, true)"),
+                " or using magic code to disply glb file:",
+                code("#!glb -f c:/path/to/name.glb")
+            );
+
+            KernelInvocationContext.Current?.Display(view);
+        }
+        catch (Exception ex)
+        {
+            KernelInvocationContext.Current?.Display(ex);
+        }
     }
 
     private static Command CreateGlbMagicCommand()
@@ -82,7 +91,7 @@ public static class ManifoldKernelExtension
         }
     }
 
-    private static StringBuilder GenerateGlbHtml(string tempFile)
+    internal static StringBuilder GenerateGlbHtml(string tempFile)
     {
         StringBuilder sb = new();
         byte[] fileBytes = File.ReadAllBytes(tempFile);

@@ -43,7 +43,8 @@ jobs:
         shell: powershell
         run: |
           Remove-Item -Path "build\bin\Release" -Force -Recurse
-          cmake . -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DMANIFOLD_DEBUG=ON -DMANIFOLD_PAR=NONE -DMANIFOLD_EXPORT=ON -DCMAKE_PREFIX_PATH=\vcpkg\installed\x64-windows\share -A x64 -B build
+          $path = (Get-Location).Path
+          cmake . -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DMANIFOLD_DEBUG=ON -DMANIFOLD_PAR=NONE -DMANIFOLD_EXPORT=ON -DCMAKE_PREFIX_PATH="$path/vcpkg/installed/x64-windows/share" -A x64 -B build
           cd build
           cmake --build . --target ALL_BUILD --config Release
       - name: Copy to bindary
