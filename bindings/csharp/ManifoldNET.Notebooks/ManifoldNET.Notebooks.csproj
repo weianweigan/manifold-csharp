@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <IsPackable>true</IsPackable>
+    <PackageDescription>Formats dates as an SVG clock in .NET Interactive</PackageDescription>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>Polyglot Notebooks extension that displays Manifold object.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <None Remove="bin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="microsoft.dotnet.interactive" Version="1.0.0-beta.23562.1" />
+    <PackageReference Include="microsoft.dotnet.interactive.csharp" Version="1.0.0-beta.23562.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="extension.dib" Pack="true" PackagePath="interactive-extensions/dotnet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ManifoldNET\ManifoldNET.csproj" />
+  </ItemGroup>
+</Project>

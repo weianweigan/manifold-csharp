@@ -92,7 +92,7 @@
     </Content>
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+<!--  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="@echo off&#xD;&#xA;&#xD;&#xA;set source=$(ProjectDir)runtimes\win-x64\binary\$(Configuration)&#xD;&#xA;set destination=$(ProjectDir)runtimes\win-x64\native&#xD;&#xA;&#xD;&#xA;if not exist &quot;%25destination%25&quot; (&#xD;&#xA;    echo Directory not found: %25destination%25&#xD;&#xA;    md &quot;%25destination%25&quot;&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;del /q /f &quot;%25destination%25\*&quot;&#xD;&#xA;echo Clear directory: %25destination%25&#xD;&#xA;&#xD;&#xA;(robocopy %25source%25 %25destination%25 /MIR /NFL /NDL /R:0 /W:0) ^&amp; exit 0" />
-  </Target>
+  </Target>-->
 </Project>

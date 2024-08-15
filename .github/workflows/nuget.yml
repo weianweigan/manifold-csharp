@@ -70,12 +70,26 @@ jobs:
       - name: Set tag to version  
         run: dotnet TagToVersion -t ${{ github.ref }} -f bindings\csharp\Version.props
 
+      - name: Copy manifoldc.dll
+        shell: powershell
+        run: |
+            Remove-Item -Path "bindings\csharp\ManifoldNET\runtimes\win-x64\native" -Force -Recurse
+            robocopy bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release bindings\csharp\ManifoldNET\runtimes\win-x64\native /MIR /NFL /NDL /R:0 /W:0; exit 0
+
       - name: Build csharp package
         run: |
+            dir bindings\csharp\ManifoldNET\runtimes\win-x64\native
             dotnet build bindings\csharp\ManifoldNET.sln -c Release -p:Platform="Any CPU"
+
+      - name: Copy manifoldc.dll with mesh export
+        shell: powershell
+        run: |
+            Remove-Item -Path "bindings\csharp\ManifoldNET\runtimes\win-x64\native" -Force -Recurse
+            robocopy bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release_MeshExport bindings\csharp\ManifoldNET\runtimes\win-x64\native /MIR /NFL /NDL /R:0 /W:0; exit 0
 
       - name: Build csharp mesh export package
         run: |
+            dir bindings\csharp\ManifoldNET\runtimes\win-x64\native
             dotnet build bindings\csharp\ManifoldNET.sln -c Release_MeshExport -p:Platform="Any CPU"
 
       - name: Publish to nuget.org
@@ -83,3 +97,6 @@ jobs:
 
       - name: Publish mesh export to nuget.org
         run: dotnet nuget push bindings\csharp\ManifoldNET\bin\Release_MeshExport\*.nupkg --api-key ${{ secrets.NugetKey }} --source https://api.nuget.org/v3/index.json
+
+      - name: Publish mesh export to nuget.org
+        run: dotnet nuget push bindings\csharp\ManifoldNET.Notebooks\bin\Release_MeshExport\*.nupkg --api-key ${{ secrets.NugetKey }} --source https://api.nuget.org/v3/index.json
