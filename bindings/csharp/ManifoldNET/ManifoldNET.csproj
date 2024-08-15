@@ -86,6 +86,10 @@
       <PackagePath>runtimes/win-x64/native</PackagePath>
       <Pack>true</Pack>
     </Content>
+    <Content Include="runtimes/win-x64/native/zlib1.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
   </ItemGroup>
 
 <!--  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

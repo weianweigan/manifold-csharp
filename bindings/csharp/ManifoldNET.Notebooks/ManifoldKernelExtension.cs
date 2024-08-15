@@ -14,8 +14,6 @@ public static class ManifoldKernelExtension
     {
         try
         {
-            KernelInvocationContext.Current?.Display((object)"Loading manifold extesion...");
-
             // Extension for Manifold object.
             Formatter.Register<Manifold>(
                 (m, writer) => writer.Write(m.ToModelViewer().ToString()),
@@ -65,7 +63,7 @@ public static class ManifoldKernelExtension
 
     public static StringBuilder ToModelViewer(this Manifold manifold)
     {
-        string tempFile = Path.GetTempFileName();
+        string tempFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".glb");
 
         try
         {
