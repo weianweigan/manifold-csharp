@@ -1,6 +1,6 @@
 ﻿# ManifoldNET
 
-![NuGet Downloads](https://img.shields.io/nuget/dt/ManifoldNET.MeshIO)
+![ManifoldNET](./ManifoldNET/icon.png)
 
 C# binding for [Manifold](https://github.com/elalish/manifold).
 
@@ -8,17 +8,26 @@ Manifold is a geometry library dedicated to creating and operating on manifold t
 
 # Nuget package 📦
 
-## Manifold
+## [ManifoldNET](https://www.nuget.org/packages/ManifoldNET)
 
 Default package that cannot export glb file!
 
 ![NuGet Version](https://img.shields.io/nuget/v/ManifoldNET)
+![NuGet Downloads](https://img.shields.io/nuget/dt/ManifoldNET)
 
-## Manifold.MeshIO
+## [ManifoldNET.MeshIO](https://www.nuget.org/packages/ManifoldNET.MeshIO)
 
-With export options.
+Support export to glb file.
 
 ![NuGet Version](https://img.shields.io/nuget/v/ManifoldNET.MeshIO)
+![NuGet Downloads](https://img.shields.io/nuget/dt/ManifoldNET.MeshIO)
+
+## [Manifold.Notebooks](https://www.nuget.org/packages/ManifoldNET.Notebooks)
+
+Packages which you can use it in VS Code Polyglot.
+
+![NuGet Version](https://img.shields.io/nuget/v/ManifoldNET.Notebooks)
+![NuGet Downloads](https://img.shields.io/nuget/dt/ManifoldNET.Notebooks)
 
 # Quick start 🚀
 
@@ -34,7 +43,7 @@ Manifold cube = Manifold.Cube(1, 1, 1, true);
 
 > You can quickly experience the usage of ManifoldNET through notebooks.
 
-* [01.GetStarted.ipynb](./bindings/csharp/notebooks/01.GetStarted.ipynb)
+* [01.GetStarted.ipynb](./notebooks/01.GetStarted.ipynb)
 
 > Requirements: C# notebooks require .NET 8 and the VS Code Polyglot extension.
 
