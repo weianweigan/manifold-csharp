@@ -34,4 +34,18 @@ public partial class Manifold
     {
         return BooleanOperation(left, right, BoolOperationType.Intersect);
     }
+
+    /// <summary>
+    /// Overloaded ^ operator to perform a boolean intersection operation on two Manifold objects.
+    /// </summary>
+    /// <remarks>
+    /// Same as <see cref="operator &amp;(Manifold, Manifold)"/>
+    /// </remarks>
+    /// <param name="left">The left operand, a Manifold object.</param>
+    /// <param name="right">The right operand, a Manifold object.</param>
+    /// <returns>Returns a new Manifold object that is the result of the boolean intersection operation.</returns>
+    public static Manifold operator ^(Manifold left, Manifold right)
+    {
+        return BooleanOperation(left, right, BoolOperationType.Intersect);
+    }
 }

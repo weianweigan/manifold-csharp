@@ -32,5 +32,11 @@ There is some ways to display manifold object:
 # Samples
 
 * [01.GetStarted.ipynb](./../notebooks/01.GetStarted.ipynb)
+* [02.Extrude.ipynb](./../notebooks/02.Extrude.ipynb)
+* [03.Revolve.ipynb](./../notebooks/03.Revolve.ipynb)
+* [04.CubeWithDents.ipynb](./../notebooks/04.CubeWithDents.ipynb)
+* [05.Bricks.ipynb](./../notebooks/05.Bricks.ipynb)
+* [06.GyroidModule.ipynb](./../notebooks/06.GyroidModule.ipynb)
+* [07.Maze.ipynb](./../notebooks/07.Maze.ipynb)
 
 > Requirements: C# notebooks require .NET 8 and the VS Code Polyglot extension.
