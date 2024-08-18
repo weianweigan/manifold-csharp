@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using static ManifoldNET.Import.Native;
 using static ManifoldNET.Utils.MemoryUtils;
@@ -10,7 +13,7 @@ namespace ManifoldNET;
 /// <summary>
 /// Core class of this Manifold.NET.
 /// </summary>
-public sealed unsafe class Manifold : ManifoldObject
+public sealed unsafe partial class Manifold : ManifoldObject
 {
     internal Manifold(IntPtr pointer)
         : base(pointer) { }
@@ -120,24 +123,30 @@ public sealed unsafe class Manifold : ManifoldObject
     /// <param name="slices">Number of extra copies of the crossSection to insert into
     /// the shape vertically; especially useful in combination with twistDegrees to
     /// avoid interpolation artifacts.Default is none.</param>
-    /// <param name="scaleTop">Amount to scale the top (independently in X and Y). If the
-    /// scale is {0, 0}, a pure cone is formed with only a single vertex at the top.
-    /// Note that scale is applied after a twist.
-    /// Default
-    ///    {1, 1}.</param>
     /// <param name="twistDegrees">Amount to twist the top crossSection relative to the
     /// bottom, interpolated linearly for the divisions in between.</param>
+    /// <param name="scale_x"></param>
+    /// <param name="scale_y"></param>
     /// <returns></returns>
     public static Manifold Extrude(
         Polygons crossSection,
         float height,
         int slices,
         float twistDegrees,
-        Vector2 scaleTop
+        float scale_x = 1f,
+        float scale_y = 1f
     )
     {
         return ManifoldOp(mem =>
-            manifold_extrude(mem, crossSection.GetPointer(), height, slices, twistDegrees, scaleTop)
+            manifold_extrude(
+                mem,
+                crossSection.GetPointer(),
+                height,
+                slices,
+                twistDegrees,
+                scale_x,
+                scale_y
+            )
         );
     }
 
@@ -159,16 +168,26 @@ public sealed unsafe class Manifold : ManifoldObject
     /// </summary>
     /// <param name="manifolds"></param>
     /// <returns></returns>
-    public static Manifold Compose(ManifoldArray manifolds)
+    internal static Manifold Compose(ManifoldArray manifolds)
     {
         return ManifoldOp(mem => manifold_compose(mem, manifolds.GetPointer()));
+    }
+
+    /// <summary>
+    /// Compose.
+    /// </summary>
+    /// <param name="manifolds"></param>
+    /// <returns></returns>
+    public static Manifold Compose(IEnumerable<Manifold> manifolds)
+    {
+        return Compose(new ManifoldArray(manifolds.ToList()));
     }
 
     /// <summary>
     /// Decompose.
     /// </summary>
     /// <returns></returns>
-    public ManifoldArray Decompose()
+    internal ManifoldArray Decompose_internal()
     {
         return new ManifoldArray(
             manifold_decompose(
@@ -176,6 +195,15 @@ public sealed unsafe class Manifold : ManifoldObject
                 this.GetPointer()
             )
         );
+    }
+
+    /// <summary>
+    /// Decompose.
+    /// </summary>
+    /// <returns></returns>
+    public IReadOnlyList<Manifold> Decompose()
+    {
+        return Decompose_internal().ToList();
     }
     #endregion
 
@@ -338,13 +366,31 @@ public sealed unsafe class Manifold : ManifoldObject
     /// Perform the given boolean operation on a list of Manifolds. In case of
     /// Subtract, all Manifolds in the tail are difference from the head.
     /// </summary>
-    public static Manifold BatchBoolOperation(
+    internal static Manifold BatchBoolOperation(
         ManifoldArray manifolds,
         BoolOperationType boolOperationType
     )
     {
         return ManifoldOp(mem =>
             manifold_batch_boolean(mem, manifolds.GetPointer(), boolOperationType)
+        );
+    }
+
+    /// <summary>
+    /// Perform the given boolean operation on a list of Manifolds. In case of
+    /// Subtract, all Manifolds in the tail are difference from the head.
+    /// </summary>
+    public static Manifold BatchBoolOperation(
+        IEnumerable<Manifold> manifolds,
+        BoolOperationType boolOperationType
+    )
+    {
+        return ManifoldOp(mem =>
+            manifold_batch_boolean(
+                mem,
+                new ManifoldArray((manifolds.ToList())).GetPointer(),
+                boolOperationType
+            )
         );
     }
 

@@ -1,4 +1,5 @@
-﻿using static ManifoldNET.Import.Native;
+﻿using System.Collections.Generic;
+using static ManifoldNET.Import.Native;
 using static ManifoldNET.Utils.MemoryUtils;
 
 namespace ManifoldNET;
@@ -29,6 +30,19 @@ public sealed class CrossSectionArray : ManifoldObject
                 (ulong)sz
             )
         ) { }
+
+    /// <summary>
+    /// Create a <see cref="CrossSectionArray"/> by <see cref="IReadOnlyList{CrossSection}"/>
+    /// </summary>
+    /// <param name="crossSections"></param>
+    public CrossSectionArray(IReadOnlyList<CrossSection> crossSections)
+        : this(crossSections.Count)
+    {
+        for (int i = 0; i < crossSections.Count; i++)
+        {
+            this[i] = crossSections[i];
+        }
+    }
 
     private CrossSectionArray(IntPtr pointer)
         : base(pointer) { }

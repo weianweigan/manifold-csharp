@@ -8,7 +8,7 @@ namespace ManifoldNET;
 /// Manifold list.
 /// Usage: <see cref="Manifold.BatchBoolOperation(ManifoldArray, BoolOperationType)"/>
 /// </summary>
-public sealed class ManifoldArray : ManifoldObject, IEnumerable<Manifold>
+internal sealed class ManifoldArray : ManifoldObject, IEnumerable<Manifold>
 {
     sealed class ManifoldsIterator : IEnumerator<Manifold>
     {

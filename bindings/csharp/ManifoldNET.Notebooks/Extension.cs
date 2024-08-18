@@ -6,9 +6,9 @@ namespace ManifoldNET;
 
 public static class Extension
 {
-    public static void DisplayGlbFile(this Manifold manifold)
+    public static void DisplayGlbFile(this Manifold manifold, int height = 400)
     {
-        KernelInvocationContext.Current?.DisplayAs(manifold.ToModelViewer().ToString(), "text/html");
+        KernelInvocationContext.Current?.DisplayAs(manifold.ToModelViewer(height).ToString(), "text/html");
     }
 
     public static void DisplayGlbFile(this string tempFile)

@@ -96,7 +96,8 @@ internal static unsafe partial class Native
         float height,
         int slices,
         float twist_degrees,
-        Vector2 scaleTop
+        float scale_x,
+        float scale_y
     );
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]

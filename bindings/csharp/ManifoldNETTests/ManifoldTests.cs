@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ManifoldNETTests;
 
@@ -47,12 +48,15 @@ public class ManifoldTests
     [Fact]
     public void Extrude_square()
     {
-        CrossSection section = CrossSection.Square(1.1f, 1.1f, true);
-        Manifold manifold = Manifold.Extrude(section.Polygons(), 3.3f, 0, 0, new Vector2(1, 1));
+        CrossSection section = CrossSection.Square(1.0f, 1.0f, true);
+        Manifold manifold = Manifold.Extrude(section.Polygons(), 1f, 0, 0);
 
         Assert.NotNull(manifold);
         Assert.NotNull(manifold.MeshGL);
         Assert.Equal(ManifoldError.NoError, manifold.Status);
+        Assert.Equal(1f, manifold.Properties.volume);
+        Assert.Equal(6f, manifold.Properties.surface_area);
+
         AssertCubeTrianglesCount(manifold);
     }
 
@@ -63,13 +67,7 @@ public class ManifoldTests
     public void Extrude_circle(float degress)
     {
         CrossSection section = CrossSection.Circle(1.1f, 1);
-        Manifold manifold = Manifold.Extrude(
-            section.Polygons(),
-            3.3f,
-            0,
-            twistDegrees: degress,
-            new Vector2(1, 1)
-        );
+        Manifold manifold = Manifold.Extrude(section.Polygons(), 3.3f, 0, twistDegrees: degress);
 
         Assert.NotNull(manifold);
         Assert.NotNull(manifold.MeshGL);
@@ -90,15 +88,14 @@ public class ManifoldTests
     [Fact]
     public void Compose_and_decompose_test()
     {
-        var vec = new ManifoldArray([Manifold.Cube(1, 1, 1), Manifold.Sphere(1, 1),]);
+        List<Manifold> manifolds = [Manifold.Cube(1, 1, 1), Manifold.Sphere(1, 1)];
 
-        Manifold manifold = Manifold.Compose(vec);
+        Manifold manifold = Manifold.Compose(manifolds);
         Assert.NotNull(manifold);
 
-        ManifoldArray decomposeVec = manifold.Decompose();
-        Assert.NotNull(decomposeVec);
-        Assert.Equal(2, decomposeVec.Length);
-        Assert.Equal(2, decomposeVec.ToList().Count);
+        IReadOnlyList<Manifold> decomposeItems = manifold.Decompose();
+        Assert.NotNull(decomposeItems);
+        Assert.Equal(2, decomposeItems.Count);
     }
 
     [Fact]

@@ -61,7 +61,7 @@ public static class ManifoldKernelExtension
         return clockCommand;
     }
 
-    public static StringBuilder ToModelViewer(this Manifold manifold)
+    public static StringBuilder ToModelViewer(this Manifold manifold, int height = 400)
     {
         string tempFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".glb");
 
@@ -69,7 +69,7 @@ public static class ManifoldKernelExtension
         {
 #if MESH_EXPORT
             manifold.MeshGL.ExportMeshGL(tempFile);
-            return GenerateGlbHtml(tempFile);
+            return GenerateGlbHtml(tempFile, height);
 #else
             throw new ManifoldNotebookException(
                 "Cannot export glb file, because Export option did not on!"
@@ -89,8 +89,15 @@ public static class ManifoldKernelExtension
         }
     }
 
-    internal static StringBuilder GenerateGlbHtml(string tempFile)
+    internal static StringBuilder GenerateGlbHtml(string tempFile, int height = 400)
     {
+        if (height <= 0)
+        {
+            throw new ManifoldNotebookException(
+                "Preview cell's height should be greater than zero"
+            );
+        }
+
         StringBuilder sb = new();
         byte[] fileBytes = File.ReadAllBytes(tempFile);
         string modelData = Convert.ToBase64String(fileBytes);
@@ -113,8 +120,18 @@ public static class ManifoldKernelExtension
 
                     model-viewer {
                         width: 100%;
-                        height: 500px;
-                    }
+                    
+            """
+        );
+        sb.Append(
+            $"""
+                        height: {height}px;
+            """
+        );
+
+        sb.Append(
+            """
+            }
                 </style>
             </head>
             <body>
@@ -125,6 +142,7 @@ public static class ManifoldKernelExtension
                     touch-action="pan-y" src="data:image/jpeg;base64, 
             """
         );
+
         sb.Append(modelData);
         sb.Append(
             """

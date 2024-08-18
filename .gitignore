@@ -120,3 +120,6 @@ __pycache__
 
 # PyCharm
 .idea
+
+# Visual Studio
+.vs

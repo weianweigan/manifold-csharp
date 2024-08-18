@@ -24,9 +24,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageProjectUrl>https://github.com/elalish/manifold</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/weianweigan/manifold-csharp/blob/dev-csharp/bindings/csharp/Readme.md</PackageProjectUrl>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/elalish/manifold</RepositoryUrl>
+    <RepositoryUrl>https://github.com/weianweigan/manifold-csharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>manifold;mesh;mesh booloperation;geometry library;topological;</PackageTags>
     <Description>Geometry library for topological robustness.</Description>
