@@ -3,7 +3,7 @@ name: nuget
 on:
   push:
     tags:
-    - '*'
+      - "*"
   workflow_dispatch:
 
 jobs:
@@ -16,19 +16,8 @@ jobs:
           submodules: recursive
       - uses: jwlawson/actions-setup-cmake@v2
       - uses: ilammy/msvc-dev-cmd@v1
-      # Build release
-      - name: Build
-        shell: powershell
-        run: |
-          cmake . -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DMANIFOLD_DEBUG=ON -DMANIFOLD_PAR=NONE -A x64 -B build
-          cd build
-          cmake --build . --target ALL_BUILD --config Release
-      - name: Copy to bindary
-        shell: powershell
-        run: |
-          robocopy build\bin\Release bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release /NFL /NDL /R:0 /W:0; exit 0
 
-       # Build release with mesh export option.
+      # Install vcpkg so assimp and tbb can be installed
       - name: Install vcpkg
         shell: powershell
         run: |
@@ -38,13 +27,28 @@ jobs:
           $env:VCPKG_ROOT = "$path\vcpkg"
           $env:PATH = "$env:VCPKG_ROOT;$env:PATH"
           vcpkg install assimp
+          vcpkg install tbb
 
+      # Build release
+      - name: Build
+        shell: powershell
+        run: |
+          $path = (Get-Location).Path
+          cmake . -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DMANIFOLD_DEBUG=ON -DMANIFOLD_PAR=TBB -DCMAKE_PREFIX_PATH="$path/vcpkg/installed/x64-windows/share" -A x64 -B build
+          cd build
+          cmake --build . --target ALL_BUILD --config Release
+      - name: Copy to bindary
+        shell: powershell
+        run: |
+          robocopy build\bin\Release bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release /NFL /NDL /R:0 /W:0; exit 0
+
+        # Build release with mesh export option.
       - name: Build with mesh export on
         shell: powershell
         run: |
           Remove-Item -Path "build\bin\Release" -Force -Recurse
           $path = (Get-Location).Path
-          cmake . -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DMANIFOLD_DEBUG=ON -DMANIFOLD_PAR=NONE -DMANIFOLD_EXPORT=ON -DCMAKE_PREFIX_PATH="$path/vcpkg/installed/x64-windows/share" -A x64 -B build
+          cmake . -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DMANIFOLD_DEBUG=ON -DMANIFOLD_PAR=TBB -DMANIFOLD_EXPORT=ON -DCMAKE_PREFIX_PATH="$path/vcpkg/installed/x64-windows/share" -A x64 -B build
           cd build
           cmake --build . --target ALL_BUILD --config Release
       - name: Copy to bindary
@@ -61,37 +65,37 @@ jobs:
       - name: Setup .NET SDKs
         uses: actions/setup-dotnet@v4
         with:
-            dotnet-version: '8.0.x'
+          dotnet-version: "8.0.x"
 
       # https://github.com/dotnet-campus/dotnetCampus.TagToVersion
       - name: Install dotnet tool
         run: |
-            dotnet --list-sdks
-            dotnet tool install -g dotnetCampus.TagToVersion
+          dotnet --list-sdks
+          dotnet tool install -g dotnetCampus.TagToVersion
 
-      - name: Set tag to version  
+      - name: Set tag to version
         run: dotnet TagToVersion -t ${{ github.ref }} -f bindings\csharp\Version.props
 
       - name: Copy manifoldc.dll
         shell: powershell
         run: |
-            robocopy bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release bindings\csharp\ManifoldNET\runtimes\win-x64\native /NFL /NDL /R:0 /W:0; exit 0
+          robocopy bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release bindings\csharp\ManifoldNET\runtimes\win-x64\native /NFL /NDL /R:0 /W:0; exit 0
 
       - name: Build csharp package
         run: |
-            dir bindings\csharp\ManifoldNET\runtimes\win-x64\native
-            dotnet build bindings\csharp\ManifoldNET.sln -c Release -p:Platform="Any CPU"
+          dir bindings\csharp\ManifoldNET\runtimes\win-x64\native
+          dotnet build bindings\csharp\ManifoldNET.sln -c Release -p:Platform="Any CPU"
 
       - name: Copy manifoldc.dll with mesh export
         shell: powershell
         run: |
-            Remove-Item -Path "bindings\csharp\ManifoldNET\runtimes\win-x64\native\*" -Force -Recurse
-            robocopy bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release_MeshExport bindings\csharp\ManifoldNET\runtimes\win-x64\native /NFL /NDL /R:0 /W:0; exit 0
+          Remove-Item -Path "bindings\csharp\ManifoldNET\runtimes\win-x64\native\*" -Force -Recurse
+          robocopy bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release_MeshExport bindings\csharp\ManifoldNET\runtimes\win-x64\native /NFL /NDL /R:0 /W:0; exit 0
 
       - name: Build csharp mesh export package
         run: |
-            dir bindings\csharp\ManifoldNET\runtimes\win-x64\native
-            dotnet build bindings\csharp\ManifoldNET.sln -c Release_MeshExport -p:Platform="Any CPU"
+          dir bindings\csharp\ManifoldNET\runtimes\win-x64\native
+          dotnet build bindings\csharp\ManifoldNET.sln -c Release_MeshExport -p:Platform="Any CPU"
 
       - name: Publish to nuget.org
         run: dotnet nuget push bindings\csharp\ManifoldNET\bin\Release\*.nupkg --api-key ${{ secrets.NugetKey }} --source https://api.nuget.org/v3/index.json
