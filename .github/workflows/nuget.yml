@@ -37,10 +37,17 @@ jobs:
           cmake . -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DMANIFOLD_DEBUG=ON -DMANIFOLD_PAR=TBB -DCMAKE_PREFIX_PATH="$path/vcpkg/installed/x64-windows/share" -A x64 -B build
           cd build
           cmake --build . --target ALL_BUILD --config Release
+
       - name: Copy to bindary
         shell: powershell
         run: |
           robocopy build\bin\Release bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release /NFL /NDL /R:0 /W:0; exit 0
+
+      - name: Copy tbb12 binary to Release_MeshExport
+        shell: powershell
+        run: |
+          dir bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release
+          robocopy vcpkg\installed\x64-windows\bin bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release /NFL /NDL /R:0 /W:0; exit 0
 
         # Build release with mesh export option.
       - name: Build with mesh export on
@@ -51,10 +58,12 @@ jobs:
           cmake . -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DMANIFOLD_DEBUG=ON -DMANIFOLD_PAR=TBB -DMANIFOLD_EXPORT=ON -DCMAKE_PREFIX_PATH="$path/vcpkg/installed/x64-windows/share" -A x64 -B build
           cd build
           cmake --build . --target ALL_BUILD --config Release
+
       - name: Copy to bindary
         shell: powershell
         run: |
           robocopy build\bin\Release bindings\csharp\ManifoldNET\runtimes\win-x64\binary\Release_MeshExport /NFL /NDL /R:0 /W:0; exit 0
+
       - name: Copy assimp binary to Release_MeshExport
         shell: powershell
         run: |

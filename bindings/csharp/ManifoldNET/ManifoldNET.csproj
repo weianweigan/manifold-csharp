@@ -67,6 +67,10 @@
       <PackagePath>runtimes/win-x64/native</PackagePath>
       <Pack>true</Pack>
     </Content>
+    <Content Include="runtimes/win-x64/native/tbb12.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+      <Pack>true</Pack>
+    </Content>
   </ItemGroup>
 
   <ItemGroup Condition="$(Configuration.Contains('MeshExport'))">
